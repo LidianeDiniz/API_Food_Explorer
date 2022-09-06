@@ -5,7 +5,7 @@ class NotesController{
         const {title, description, tags, links}= request.body;
         const user_id = request.user.id;
         
-        //const {user_id} = request.params; mudou para o código acima após o middleware. 
+       
 
         const note_id = await knex("notes").insert({
             title, 
