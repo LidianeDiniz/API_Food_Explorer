@@ -15,6 +15,11 @@ module.exports = {
             directory: path.resolve(__dirname, "src", "database", "knex", "migrations")
           
           },
+
+          seeds: {
+            directory: path.join(__dirname, 'src', 'database', 'knex', 'seeds')
+          },
+
           useNullAsDefault: true
     }
 };
