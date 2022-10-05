@@ -2,7 +2,7 @@ const { Router } = require ("express");
 
 const usersRoutes = require("./users.routes")
 const platesRoutes = require("./plates.routes")
-const sessionsRoutes = require("./Sessions.routes");
+const sessionsRoutes = require("./sessions.routes");
 
 
 
