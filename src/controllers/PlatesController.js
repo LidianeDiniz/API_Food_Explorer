@@ -3,7 +3,7 @@ const DiskStorage = require("../providers/DiskStorage");
 
 class PlatesController {
   async create(request, response) {
-    const { title, description, ingredients, price } = request.body;
+    const { title, description, ingredients, category, price } = request.body;
 
     const { filename: imageFilename } = request.file;
 
@@ -15,27 +15,44 @@ class PlatesController {
       image: filename,
       title,
       description,
+      category,
       price
     });
     
-    const ingredientsInsert = ingredients.map((name) => ({
-      name,
-      plates_id,
-    }));
+    const hasOnlyOneIngredient = typeof(ingredients) === "string";
+
+    let ingredientsInsert
+    if (hasOnlyOneIngredient) {
+      ingredientsInsert = {
+        name: ingredients,
+        plates_id
+      }
+
+    } else if (ingredients.length > 1) {
+      ingredientsInsert = ingredients.map(ingredient => {
+        return {
+          name : ingredient,
+          plates_id
+        }
+      });
+
+    } else {
+      return 
+    }
+
 
     await knex("ingredients").insert(ingredientsInsert);
 
     return response.status(201).json();
   }
 
-
   async update(request, response) {
-    const { title, description, ingredients, price} = request.body;
+    const { title, description, ingredients, price, category} = request.body;
     const { id } = request.params;
     const { filename: imageFilename } = request.file;
 
     const diskStorage = new DiskStorage();
-
+    
     const plate = await knex("plates").where({ id }).first();
 
     if(plate.image) {
@@ -49,19 +66,26 @@ class PlatesController {
     plate.title = title ?? plate.title;
     plate.description = description ?? plate.description;
     plate.price = price ?? plate.price;
+    plate.category = category ?? plate.category;
 
+   
+    
     const ingredientsInsert = ingredients.map(name => ({
         name,
         plates_id: plate.id
     }));
 
     await knex ("plates").where({ id }).update(plate);
+    await knex("plates").where({ id }).update('updated_at', knex.fn.now())
+
     await knex("ingredients").where({plates_id: id}).delete();
     await knex("ingredients").insert(ingredientsInsert);
 
     return response.staus(200).json();
     
   }
+
+ 
 
   async index(request, response) {
     const { title, ingredients } = request.query;
@@ -74,9 +98,10 @@ class PlatesController {
 
       plates = await knex("ingredients")
         .select([
-          "plates.id",
+         "plates.id",
           "plates.title",
           "plates.description",
+          "plates.category",
           "plates.price",
           "plates.image"
         ])
@@ -91,7 +116,7 @@ class PlatesController {
     const platesIngredients = await knex("ingredients");
 
     const platesWithIngredients = plates.map(plate => {
-      const plateIngredients = platesIngredients.filter(
+    const plateIngredients = platesIngredients.filter(
         ingredient => ingredient.plates_id === plate.id
       );
 
