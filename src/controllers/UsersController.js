@@ -4,7 +4,7 @@ const knex = require("../database/knex");
 
 
 
-class UserController {
+class UsersController {
    async create(request, response){
       const { name, email, password } = request.body;
       const checkUserExists = await knex ("users").where({email}).first();
@@ -28,4 +28,4 @@ class UserController {
 
 
 
-module.exports= UserController;
+module.exports= UsersController;
