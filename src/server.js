@@ -3,7 +3,7 @@ require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
 const AppError = require("./utils/AppError");
-const routes = require("./Routes");
+const routes = require("./routes");
 const sqliteConnection = require("./database/sqlite");
 const uploadConfig = require("./configs/upload");
 
