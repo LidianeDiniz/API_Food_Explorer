@@ -3,11 +3,11 @@ const AppError = require("../utils/AppError");
 const knex = require("../database/knex");
 
 
-
 class UsersController {
    async create(request, response){
       const { name, email, password } = request.body;
-      const checkUserExists = await knex ("users").where({email}).first();
+
+      const checkUserExists = await knex("users").where({ email }).first();
 
 
       if (checkUserExists) {
@@ -15,7 +15,8 @@ class UsersController {
       }
     
       const hashPassword = await hash(password, 8);
-      await knex("users").insert({name, email, password: hashPassword });
+
+      await knex("users").insert({ name, email, password: hashPassword});
 
       return response.status(201).json();
     }
@@ -23,9 +24,9 @@ class UsersController {
     
  
     
-  }
+}
+
+module.exports = UsersController;
 
 
 
-
-module.exports= UsersController;
