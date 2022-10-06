@@ -2,7 +2,7 @@ require("express-async-errors");
 require("dotenv/config");
 
 const express = require("express");
-const routes = require("../Routes")
+const routes = require("./Routes")
 
 
 const sqliteConnection = require("./database/sqlite");

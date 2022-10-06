@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const multer = require('multer');
-const uploadConfig = require("../src/configs/upload");
+const uploadConfig = require("../configs/upload");
 
-const PlatesController = require("../src/Controllers/PlatesController");
-const ensureAuthenticated = require("../src/middleware/ensureAuthenticated");
-const ensureIsAdmin  = require("../src/middleware/ensureAuthenticatedAdmin");
+const PlatesController = require("../Controllers/PlatesController");
+const ensureAuthenticated = require("../middleware/ensureAuthenticated");
+const ensureIsAdmin  = require("../middleware/ensureAuthenticatedAdmin");
 
 const platesRoutes = Router();
 const upload = multer(uploadConfig.MULTER);
